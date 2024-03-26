@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  external_id: 1
   checkin_at: 2024-03-26 10:34:16
   checkout_at: 2024-03-26 10:34:16
   price: 1
@@ -9,6 +10,7 @@ one:
   status: MyString
 
 two:
+  external_id: 2
   checkin_at: 2024-03-26 10:34:16
   checkout_at: 2024-03-26 10:34:16
   price: 1
