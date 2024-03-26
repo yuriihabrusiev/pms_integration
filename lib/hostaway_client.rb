@@ -4,17 +4,18 @@ class HostawayClient
   include Singleton
   include HTTParty
 
+  PARAMS_MAPPING = {
+    latest_activity_start: "latestActivityStart",
+    latest_activity_end: "latestActivityEnd"
+  }.freeze
   BASE_URL = "https://api.hostaway.com/v1".freeze
   SUCCESS_STATUS = "success".freeze
 
   def fetch_reservations(params = {})
-    query = {}
-    query[:latestActivityStart] = params[:latest_activity_start] if params[:latest_activity_start]
-    query[:latestActivityEnd] = params[:latest_activity_end] if params[:latest_activity_end]
     response = self.class.get(
       "#{BASE_URL}/reservations",
       headers: default_headers,
-      query: query
+      query: transform_params(params)
     )
     if response["status"] == SUCCESS_STATUS
       response["result"]
@@ -40,5 +41,11 @@ class HostawayClient
 
   def default_headers
     @default_headers ||= { "Authorization" => "Bearer #{access_token}" }
+  end
+
+  def transform_params(params)
+    params.each_with_object({}) do |(key, value), query|
+      query[PARAMS_MAPPING[key]] = value
+    end
   end
 end
