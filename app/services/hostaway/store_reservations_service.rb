@@ -8,6 +8,8 @@ class Hostaway::StoreReservationsService
     Reservation.transaction do
       reservations.each { |reservation| self.class.save_reservation(reservation) }
     end
+  rescue => e
+    Rails.logger.error("Error fetching reservations: #{e.message}")
   end
 
   def self.save_reservation(reservation)
