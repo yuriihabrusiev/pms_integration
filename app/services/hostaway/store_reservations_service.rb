@@ -3,8 +3,8 @@ class Hostaway::StoreReservationsService
     @hostaway = HostawayClient.instance
   end
 
-  def call
-    reservations = @hostaway.fetch_reservations
+  def call(params: {})
+    reservations = @hostaway.fetch_reservations(params)
     Reservation.transaction do
       reservations.each { |reservation| self.class.save_reservation(reservation) }
     end

@@ -7,10 +7,14 @@ class HostawayClient
   BASE_URL = "https://api.hostaway.com/v1".freeze
   SUCCESS_STATUS = "success".freeze
 
-  def fetch_reservations
+  def fetch_reservations(params = {})
+    query = {}
+    query[:latestActivityStart] = params[:latest_activity_start] if params[:latest_activity_start]
+    query[:latestActivityEnd] = params[:latest_activity_end] if params[:latest_activity_end]
     response = self.class.get(
       "#{BASE_URL}/reservations",
-      headers: default_headers
+      headers: default_headers,
+      query: query
     )
     if response["status"] == SUCCESS_STATUS
       response["result"]
