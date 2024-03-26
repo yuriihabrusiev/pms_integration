@@ -1,4 +1,14 @@
-class Hostaway::StoreReservationsService
+class Hostaway::StoreReservationsService < IntegrationsBaseService
+  ATTRIBUTES_MAPPING = {
+    "reservationId" => "external_id",
+    "listingMapId" => "listing_id",
+    "checkInTime" => "checkin_at",
+    "checkOutTime" => "checkout_at",
+    "totalPrice" => "price",
+    "guestName" => "guest_name",
+    "status" => "status"
+  }.freeze
+
   def initialize
     @hostaway = HostawayClient.instance
   end
@@ -13,17 +23,11 @@ class Hostaway::StoreReservationsService
   end
 
   def self.save_reservation(reservation)
+    attributes = transform_attributes(reservation, mapping: ATTRIBUTES_MAPPING)
     reservation_record = Reservation.find_or_initialize_by(
-      external_id: reservation["reservationId"]
+      external_id: attributes["external_id"]
     )
-    reservation_record.update!(
-      listing_id: reservation["listingMapId"],
-      checkin_at: reservation["checkInTime"],
-      checkout_at: reservation["checkOutTime"],
-      price: reservation["totalPrice"],
-      guest_name: reservation["guestName"],
-      status: reservation["status"]
-    )
+    reservation_record.update!(attributes)
   rescue => e
     Rails.logger.error("Error saving reservation #{reservation["reservationId"]}: #{e.message}")
   end
