@@ -8,4 +8,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  namespace :webhooks do
+    resources :reservations, only: :create
+  end
 end

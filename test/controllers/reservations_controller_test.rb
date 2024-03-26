@@ -17,7 +17,7 @@ class ReservationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create reservation" do
     assert_difference("Reservation.count") do
-      post reservations_url, params: { reservation: { checkin_at: @reservation.checkin_at, checkout_at: @reservation.checkout_at, guest_name: @reservation.guest_name, listing_id: @reservation.listing_id, price: @reservation.price, status: @reservation.status } }
+      post reservations_url, params: { reservation: { external_id: 3, checkin_at: @reservation.checkin_at, checkout_at: @reservation.checkout_at, guest_name: @reservation.guest_name, listing_id: @reservation.listing_id, price: @reservation.price, status: @reservation.status } }
     end
 
     assert_redirected_to reservation_url(Reservation.last)
